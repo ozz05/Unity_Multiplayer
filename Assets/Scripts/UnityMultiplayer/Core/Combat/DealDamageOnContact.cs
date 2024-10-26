@@ -13,11 +13,12 @@ public class DealDamageOnContact : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.attachedRigidbody == null) return;
-        if(other.TryGetComponent<NetworkObject>(out NetworkObject networkObject))
+        GameObject player = other.attachedRigidbody.gameObject;
+        if(player.TryGetComponent<NetworkObject>(out NetworkObject networkObject))
         {
             if (networkObject.OwnerClientId == _ownerClientId) {return;}
         }
-        if (other.TryGetComponent<Health>(out Health health))
+        if (player.TryGetComponent<Health>(out Health health))
         {
             health.TakeDamage(_damge);
         }
