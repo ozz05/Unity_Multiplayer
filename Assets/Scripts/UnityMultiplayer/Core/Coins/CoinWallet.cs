@@ -12,4 +12,19 @@ public class CoinWallet : NetworkBehaviour
         if (!IsServer) return;
         TotalCoins.Value += coinValue;
     }
+    public bool CanSpendCoins(int coinsToSpend)
+    {
+        return coinsToSpend <= TotalCoins.Value;
+    }
+    public void SpendCoins(int coinsToSpend)
+    {
+
+        if(CanSpendCoins(coinsToSpend))
+        {
+            if(IsServer)
+            {
+                TotalCoins.Value -= coinsToSpend;
+            }
+        }
+    }
 }
