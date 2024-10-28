@@ -1,7 +1,7 @@
 using Unity.Netcode;
 using UnityEngine;
 
-public class CoinCollector : NetworkBehaviour
+public class CoinWallet : NetworkBehaviour
 {
     public NetworkVariable<int> TotalCoins = new NetworkVariable<int>();
 
