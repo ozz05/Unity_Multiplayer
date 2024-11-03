@@ -3,21 +3,27 @@ using System.Threading.Tasks;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using Unity.Networking.Transport.Relay;
+using Unity.Services.Lobbies;
 using Unity.Services.Relay;
 using Unity.Services.Relay.Models;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Collections.Generic;
+using Unity.Services.Lobbies.Models;
+using System.Collections;
 
 public class HostGameManager
 {
     private Allocation _allocation;
     private string _joinCode;
+    private string _lobbyID;
     private const int MaxConnections = 20;
     private const string GameSceneName = "Game";
     public async Task StartHostAsync()
     {
         try
         {
+            //Creates a server instance with a limit
             _allocation = await Relay.Instance.CreateAllocationAsync(MaxConnections);
         }
         catch (Exception exception)
@@ -28,6 +34,7 @@ public class HostGameManager
 
         try
         {
+            // gets the joinCode for players to join
             _joinCode = await Relay.Instance.GetJoinCodeAsync(_allocation.AllocationId);
             Debug.LogWarning("Join Code: " + _joinCode);
         }
@@ -37,11 +44,55 @@ public class HostGameManager
             return;
         }
 
+
         UnityTransport transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
         RelayServerData relayServerData = new RelayServerData(_allocation, "dtls");//udp is another option
         transport.SetRelayServerData(relayServerData);
+        //Create a lobby 
+        try
+        {
+            //lobby options are settings for the new lobby being created, like if its private or not
+            CreateLobbyOptions lobbyOptions = new CreateLobbyOptions();
+            lobbyOptions.IsPrivate = false;
+            // add data that can be read by other players where the visibility limits the access of that data
+            lobbyOptions.Data = new Dictionary<string, DataObject>()
+            {
+                {
+                    //new data object that can only be access by the members of the lobby
+                    "JoinCode", new DataObject(
+                        visibility: DataObject.VisibilityOptions.Member,
+                        value: _joinCode
+                    )
+                }
+            };
+            Lobby lobby = await Lobbies.Instance.CreateLobbyAsync(
+                "My Lobby", MaxConnections, lobbyOptions
+                );
+            _lobbyID = lobby.Id;
+        }
+        catch (LobbyServiceException e)
+        {
+            Debug.LogError(e);
+            return;
+        }
 
+        //start the host
         NetworkManager.Singleton.StartHost();
+        //Loads the scene
         NetworkManager.Singleton.SceneManager.LoadScene(GameSceneName, LoadSceneMode.Single);
+        //Recomended time for lobby service heartbeat ping is 15 seconds 
+        HostSingleton.Instance.StartCoroutine(HeartbeatLobby(15));
+    }
+
+    //This coroutine pings the lobby service to let it know the lobby is still active if this doesn't happen this lobby instance will be deleted
+    private IEnumerator HeartbeatLobby(float waitTimeSeconds)
+    {
+        // this is for performance so we do not create an new instance everytime
+        WaitForSecondsRealtime delay = new WaitForSecondsRealtime(waitTimeSeconds);
+        while (true)
+        {
+            Lobbies.Instance.SendHeartbeatPingAsync(_lobbyID);
+            yield return delay;
+        }
     }
 }
