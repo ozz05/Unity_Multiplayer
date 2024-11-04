@@ -7,8 +7,9 @@ using UnityEngine;
 public class NetworkServer
 {
     private NetworkManager _networkManager;
+
     private Dictionary<ulong, string> _clientIdToAuth = new Dictionary<ulong, string>();
-    private Dictionary<string, UserData> _authIdToUserData;
+    private Dictionary<string, UserData> _authIdToUserData = new Dictionary<string, UserData>();
     public NetworkServer(NetworkManager networkManager)
     {
         _networkManager = networkManager;

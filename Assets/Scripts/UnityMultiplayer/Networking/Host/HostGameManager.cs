@@ -1,24 +1,27 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using Unity.Networking.Transport.Relay;
+using Unity.Services.Authentication;
 using Unity.Services.Lobbies;
+using Unity.Services.Lobbies.Models;
 using Unity.Services.Relay;
 using Unity.Services.Relay.Models;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using System.Collections.Generic;
-using Unity.Services.Lobbies.Models;
-using System.Collections;
-using System.Text;
-using Unity.Services.Authentication;
+
+
 
 public class HostGameManager
 {
     private Allocation _allocation;
     private string _joinCode;
     private string _lobbyID;
+
     private NetworkServer _networkServer;
 
     private const int MaxConnections = 20;
@@ -50,8 +53,10 @@ public class HostGameManager
 
 
         UnityTransport transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
+
         RelayServerData relayServerData = new RelayServerData(_allocation, "dtls");//udp is another option
         transport.SetRelayServerData(relayServerData);
+
         //Create a lobby 
         try
         {
@@ -72,9 +77,9 @@ public class HostGameManager
             //Create Lobby
             string playerName = PlayerPrefs.GetString(NameSelector.PlayerNameKey, "Unknown");
             Lobby lobby = await Lobbies.Instance.CreateLobbyAsync(
-                $"{playerName}'s Lobby", MaxConnections, lobbyOptions
-                );
+                $"{playerName}'s Lobby", MaxConnections, lobbyOptions);
             _lobbyID = lobby.Id;
+            HostSingleton.Instance.StartCoroutine(HeartbeatLobby(15));
         }
         catch (LobbyServiceException e)
         {
@@ -102,8 +107,6 @@ public class HostGameManager
         NetworkManager.Singleton.StartHost();
         //Loads the scene
         NetworkManager.Singleton.SceneManager.LoadScene(GameSceneName, LoadSceneMode.Single);
-        //Recomended time for lobby service heartbeat ping is 15 seconds 
-        HostSingleton.Instance.StartCoroutine(HeartbeatLobby(15));
     }
 
     //This coroutine pings the lobby service to let it know the lobby is still active if this doesn't happen this lobby instance will be deleted
