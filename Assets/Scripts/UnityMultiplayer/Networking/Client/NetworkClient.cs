@@ -1,10 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using Unity.Netcode;
-using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class NetworkClient
+public class NetworkClient : IDisposable
 {
     private NetworkManager _networkManager;
     private const string MenuSceneName = "Menu";
@@ -12,7 +10,7 @@ public class NetworkClient
     {
         _networkManager = networkManager;
         //Connect to the ConnectionApprovalCallback to listen to the player info being send
-        networkManager.OnClientDisconnectCallback += OnClientDisconnect;
+        _networkManager.OnClientDisconnectCallback += OnClientDisconnect;
     }
 
     private void OnClientDisconnect(ulong clientId)
@@ -29,6 +27,14 @@ public class NetworkClient
         if (_networkManager.IsConnectedClient)
         {
             _networkManager.Shutdown();
+        }
+    }
+
+    public void Dispose()
+    {
+        if (_networkManager != null)
+        {
+            _networkManager.OnClientDisconnectCallback -= OnClientDisconnect;
         }
     }
 }

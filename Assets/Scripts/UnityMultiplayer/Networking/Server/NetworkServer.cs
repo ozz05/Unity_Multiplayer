@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-public class NetworkServer
+public class NetworkServer : IDisposable
 {
     private NetworkManager _networkManager;
 
@@ -14,8 +14,8 @@ public class NetworkServer
     {
         _networkManager = networkManager;
         //Connect to the ConnectionApprovalCallback to listen to the player info being send
-        networkManager.ConnectionApprovalCallback += ApprobalCheck;
-        networkManager.OnServerStarted += OnNetworkReady;
+        _networkManager.ConnectionApprovalCallback += ApprobalCheck;
+        _networkManager.OnServerStarted += OnNetworkReady;
     }
 
     // This function handles the players info being send
@@ -46,5 +46,17 @@ public class NetworkServer
             _authIdToUserData.Remove(authId);
         }
        
+    }
+
+    public void Dispose()
+    {
+        if ( _networkManager == null ) return;
+        _networkManager.ConnectionApprovalCallback -= ApprobalCheck;
+        _networkManager.OnClientDisconnectCallback -= OnClientDisconnect;
+        _networkManager.OnServerStarted -= OnNetworkReady;
+        if (_networkManager.IsListening)
+        {
+            _networkManager.Shutdown();
+        }
     }
 }

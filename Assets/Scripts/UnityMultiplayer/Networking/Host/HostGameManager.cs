@@ -16,7 +16,7 @@ using UnityEngine.SceneManagement;
 
 
 
-public class HostGameManager
+public class HostGameManager : IDisposable
 {
     private Allocation _allocation;
     private string _joinCode;
@@ -119,5 +119,24 @@ public class HostGameManager
             Lobbies.Instance.SendHeartbeatPingAsync(_lobbyID);
             yield return delay;
         }
+    }
+
+    public async void Dispose()
+    {
+        //Stop the coroutine
+        HostSingleton.Instance.StopCoroutine(nameof(HeartbeatLobby));
+        //If there a lobby shuts it down
+        if (!string.IsNullOrEmpty(_lobbyID))
+        {
+            try
+            {
+                await Lobbies.Instance.DeleteLobbyAsync(_lobbyID);
+            }
+            catch (LobbyServiceException ex)
+            {
+                Debug.LogException(ex);
+            }
+        }
+       _networkServer?.Dispose();
     }
 }
