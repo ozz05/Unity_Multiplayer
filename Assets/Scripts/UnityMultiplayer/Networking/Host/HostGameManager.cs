@@ -22,7 +22,7 @@ public class HostGameManager : IDisposable
     private string _joinCode;
     private string _lobbyID;
 
-    private NetworkServer _networkServer;
+    public NetworkServer NetworkServer { get; private set; }
 
     private const int MaxConnections = 20;
     private const string GameSceneName = "Game";
@@ -87,7 +87,7 @@ public class HostGameManager : IDisposable
             return;
         }
 
-        _networkServer = new NetworkServer(NetworkManager.Singleton);
+        NetworkServer = new NetworkServer(NetworkManager.Singleton);
 
         //Create UsereData
         UserData userData = new UserData
@@ -137,6 +137,6 @@ public class HostGameManager : IDisposable
                 Debug.LogException(ex);
             }
         }
-       _networkServer?.Dispose();
+        NetworkServer?.Dispose();
     }
 }

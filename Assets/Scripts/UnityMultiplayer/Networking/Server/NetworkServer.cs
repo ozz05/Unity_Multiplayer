@@ -48,6 +48,18 @@ public class NetworkServer : IDisposable
        
     }
 
+    public UserData GetUserDataByClientId(ulong clientId)
+    {
+        if (_clientIdToAuth.TryGetValue(clientId, out string authId))
+        {
+            if (_authIdToUserData.TryGetValue(authId, out UserData data))
+            {
+                return data;
+            }
+        }
+        return null;
+    }
+
     public void Dispose()
     {
         if ( _networkManager == null ) return;
