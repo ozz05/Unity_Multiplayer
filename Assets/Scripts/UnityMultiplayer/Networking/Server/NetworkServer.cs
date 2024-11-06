@@ -30,6 +30,8 @@ public class NetworkServer : IDisposable
 
         // this is to let them finish the connection to the server
         response.Approved = true;
+        response.Position = SpawnPoint.GetRandomSpawnPosition();
+        response.Rotation = Quaternion.identity;
         response.CreatePlayerObject = true;
     }
 

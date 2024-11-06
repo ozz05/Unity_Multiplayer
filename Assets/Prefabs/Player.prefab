@@ -811,6 +811,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _cinemachinecCamera: {fileID: 4750526911715926880}
+  <Health>k__BackingField: {fileID: 2958533606008450097}
   _cameraownerPriority: 11
   PlayerName:
     m_InternalValue:
