@@ -636,7 +636,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 1171.5686, y: 473.5929, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -999,6 +999,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _leaderboardEntityHolder: {fileID: 1340138848}
   _leaderboardEntityPrefab: {fileID: 9034131711212061761, guid: bb40b3eacec5e5d4fa03929c593ebc69, type: 3}
+  _entitiesToDisplay: 8
 --- !u!4 &766577379
 Transform:
   m_ObjectHideFlags: 0
@@ -2252,7 +2253,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6af26a07665d8ce49910a030c7376edd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerPrefab: {fileID: 8858475266619411769, guid: 35c92917b2ebcf448ae9dfacd8b67e28, type: 3}
+  _playerPrefab: {fileID: 3496816127410392433, guid: 35c92917b2ebcf448ae9dfacd8b67e28, type: 3}
+  _keptPointPercentage: 50
 --- !u!4 &1637755374
 Transform:
   m_ObjectHideFlags: 0
