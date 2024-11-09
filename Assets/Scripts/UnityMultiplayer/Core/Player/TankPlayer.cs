@@ -10,6 +10,8 @@ public class TankPlayer : NetworkBehaviour
     [SerializeField] private CinemachineVirtualCamera _cinemachinecCamera;
     [field: SerializeField] public Health Health { get; private set; }
     [field: SerializeField] public CoinWallet Wallet { get; private set; }
+    [SerializeField] private SpriteRenderer _miniMapIcon;
+    [SerializeField] private Color _ownerColor;
 
     [Header("Settings")]
     [SerializeField] private int _cameraownerPriority = 11;
@@ -28,8 +30,15 @@ public class TankPlayer : NetworkBehaviour
         }
         if (IsOwner)
         {
-            if (_cinemachinecCamera == null) return;
-            _cinemachinecCamera.Priority = _cameraownerPriority;
+            if (_cinemachinecCamera != null)
+            {
+                _cinemachinecCamera.Priority = _cameraownerPriority;
+            }
+            
+            if (_miniMapIcon != null)
+            {
+                _miniMapIcon.color = _ownerColor;
+            }
         }
     }
     public override void OnNetworkDespawn()
