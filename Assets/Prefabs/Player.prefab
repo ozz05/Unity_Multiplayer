@@ -796,6 +796,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01f1124d36d20024db0c9fe18a8d845b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _health: {fileID: 2958533606008450097}
+  _coinPrefab: {fileID: 514716241266634302, guid: a72cb5753f5fac34691279ec63edc9f1, type: 3}
+  _coinSpread: 3
+  _bountyPercentage: 50
+  _bountyCoinsCount: 10
+  _minBountyValue: 5
+  _layerMask:
+    serializedVersion: 2
+    m_Bits: 9
   TotalCoins:
     m_InternalValue: 0
 --- !u!114 &3496816127410392433
@@ -812,6 +821,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _cinemachinecCamera: {fileID: 4750526911715926880}
   <Health>k__BackingField: {fileID: 2958533606008450097}
+  <Wallet>k__BackingField: {fileID: 6948830188747273359}
   _cameraownerPriority: 11
   PlayerName:
     m_InternalValue:

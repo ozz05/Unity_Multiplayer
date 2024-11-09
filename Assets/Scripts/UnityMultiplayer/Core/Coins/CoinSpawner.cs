@@ -31,7 +31,7 @@ public class CoinSpawner : NetworkBehaviour
             GetSpawnPoint(), 
             Quaternion.identity);
         coinInstance.SetValue(_coinValue);
-        coinInstance.GetComponent<NetworkObject>().Spawn();
+        coinInstance.NetworkObject.Spawn();
         coinInstance.OnCollected += HandleCoinCollected;
     }
 

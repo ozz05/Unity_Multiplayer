@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &2371282520081115354
+--- !u!1001 &8292618383957552907
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3963297397439369655, guid: 0dbe2fda7af386a47887db7063b7a6d8, type: 3}
       propertyPath: m_Name
-      value: RespawningCoin
+      value: BountyCoin
       objectReference: {fileID: 0}
     - target: {fileID: 5238565927228224750, guid: 0dbe2fda7af386a47887db7063b7a6d8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -52,77 +52,43 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6968768124372822544, guid: 0dbe2fda7af386a47887db7063b7a6d8, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 7bfd0a0977e81b84a8f1d12195e5883a, type: 3}
     - target: {fileID: 7558053408131024196, guid: 0dbe2fda7af386a47887db7063b7a6d8, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 2267332544
-      objectReference: {fileID: 0}
-    - target: {fileID: 7558053408131024196, guid: 0dbe2fda7af386a47887db7063b7a6d8, type: 3}
-      propertyPath: InScenePlacedSourceGlobalObjectIdHash
-      value: 1270068000
+      value: 900359500
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3963297397439369655, guid: 0dbe2fda7af386a47887db7063b7a6d8, type: 3}
-      insertIndex: 2
-      addedObject: {fileID: -1034336225632847467}
-    - targetCorrespondingSourceObject: {fileID: 3963297397439369655, guid: 0dbe2fda7af386a47887db7063b7a6d8, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 7358231943209766966}
+      addedObject: {fileID: 514716241266634302}
   m_SourcePrefab: {fileID: 100100000, guid: 0dbe2fda7af386a47887db7063b7a6d8, type: 3}
---- !u!1 &1722636887931074925 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3963297397439369655, guid: 0dbe2fda7af386a47887db7063b7a6d8, type: 3}
-  m_PrefabInstance: {fileID: 2371282520081115354}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &-1034336225632847467
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1722636887931074925}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  UseUnreliableDeltas: 0
-  SyncPositionX: 1
-  SyncPositionY: 1
-  SyncPositionZ: 0
-  SyncRotAngleX: 0
-  SyncRotAngleY: 0
-  SyncRotAngleZ: 0
-  SyncScaleX: 0
-  SyncScaleY: 0
-  SyncScaleZ: 0
-  PositionThreshold: 0.001
-  RotAngleThreshold: 0.01
-  ScaleThreshold: 0.01
-  UseQuaternionSynchronization: 0
-  UseQuaternionCompression: 0
-  UseHalfFloatPrecision: 0
-  InLocalSpace: 0
-  Interpolate: 0
-  SlerpPosition: 0
---- !u!114 &7358231943209766966
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1722636887931074925}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13aa049bb488b9d419601136a9e96fad, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _spriteRenderer: {fileID: 4638273638482150090}
-  _coinValue: 10
---- !u!212 &4638273638482150090 stripped
+--- !u!212 &1415051485680977179 stripped
 SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 6968768124372822544, guid: 0dbe2fda7af386a47887db7063b7a6d8, type: 3}
-  m_PrefabInstance: {fileID: 2371282520081115354}
+  m_PrefabInstance: {fileID: 8292618383957552907}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &4905890624834862780 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3963297397439369655, guid: 0dbe2fda7af386a47887db7063b7a6d8, type: 3}
+  m_PrefabInstance: {fileID: 8292618383957552907}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &514716241266634302
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4905890624834862780}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21f2d5775279d3e46bc8e89d424f4348, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _spriteRenderer: {fileID: 1415051485680977179}
+  _coinValue: 0
