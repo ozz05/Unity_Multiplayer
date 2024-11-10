@@ -8,8 +8,11 @@ public class NetworkServer : IDisposable
 {
     private NetworkManager _networkManager;
 
+    public Action<string> OnClientLeft;
+
     private Dictionary<ulong, string> _clientIdToAuth = new Dictionary<ulong, string>();
     private Dictionary<string, UserData> _authIdToUserData = new Dictionary<string, UserData>();
+
     public NetworkServer(NetworkManager networkManager)
     {
         _networkManager = networkManager;
@@ -46,6 +49,8 @@ public class NetworkServer : IDisposable
         {
             _clientIdToAuth.Remove(clientId);
             _authIdToUserData.Remove(authId);
+            //Tells Host that a player has left the game 
+            OnClientLeft?.Invoke(authId);
         }
        
     }

@@ -18,6 +18,11 @@ public class NetworkClient : IDisposable
         //Make sure that the client is being disconnected from the server(the server shut down)
         if (clientId != 0 && clientId != _networkManager.LocalClientId) { return; }
 
+        Disconnect();
+    }
+
+    public void Disconnect()
+    {
         //Check that the client isn't in the menu scene
         if (SceneManager.GetActiveScene().name != MenuSceneName)
         {
@@ -37,4 +42,6 @@ public class NetworkClient : IDisposable
             _networkManager.OnClientDisconnectCallback -= OnClientDisconnect;
         }
     }
+
+    
 }
