@@ -28,8 +28,8 @@ public class NetworkServer : IDisposable
         string payload = System.Text.Encoding.UTF8.GetString(request.Payload);
         //take the Json string and cash it to a UserData
         UserData userData = JsonUtility.FromJson<UserData>(payload);
-        _clientIdToAuth[request.ClientNetworkId] = userData.UserAuthID;
-        _authIdToUserData[userData.UserAuthID] = userData;
+        _clientIdToAuth[request.ClientNetworkId] = userData.UserAuthId;
+        _authIdToUserData[userData.UserAuthId] = userData;
 
         // this is to let them finish the connection to the server
         response.Approved = true;
