@@ -15,6 +15,8 @@ public class ClientGameManager : IDisposable
 {
     private JoinAllocation _joinAllocation;
     private NetworkClient _networkClient;
+    private MatchplayMatchmaker _matchmaker;
+    private UserData _userData;
 
     private const string MenuSceneName = "Menu";
     public async Task<bool> InitAsync()
@@ -23,10 +25,18 @@ public class ClientGameManager : IDisposable
         
         //This initializes the NetworkCLient class to start listening to when the client gets disconnected from the server
         _networkClient = new NetworkClient(NetworkManager.Singleton);
+        _matchmaker = new MatchplayMatchmaker();
 
         AuthState authState = await AuthenticationWrapper.DoAuth();
         if (authState == AuthState.Authenticated)
         {
+            //Create UsereData
+            _userData = new UserData
+            {
+                UserName = PlayerPrefs.GetString(NameSelector.PlayerNameKey, "Missing Name"),
+                UserAuthId = AuthenticationService.Instance.PlayerId,
+
+            };
             return true;
         }
         return false;
@@ -52,15 +62,9 @@ public class ClientGameManager : IDisposable
         RelayServerData relayServerData = new RelayServerData(_joinAllocation, "dtls");//udp is another option
         transport.SetRelayServerData(relayServerData);
 
-        //Create UsereData
-        UserData userData = new UserData
-        {
-            UserName = PlayerPrefs.GetString(NameSelector.PlayerNameKey, "Missing Name"),
-            UserAuthId = AuthenticationService.Instance.PlayerId,
-
-        };
+        
         //Convert to Json
-        string payLoad = JsonUtility.ToJson(userData);
+        string payLoad = JsonUtility.ToJson(_userData);
         //Make byte array
         byte[] payLoadBytes = Encoding.UTF8.GetBytes(payLoad);
         //Send it to server
@@ -70,6 +74,17 @@ public class ClientGameManager : IDisposable
         NetworkManager.Singleton.StartClient();
     }
 
+    private async Task<MatchmakerPollingResult> GetMatchAsync()
+    {
+        MatchmakingResult matchmakingResult = await _matchmaker.Matchmake(_userData);
+
+        if(matchmakingResult.result == MatchmakerPollingResult.Success)
+        {
+            // Connect To Server
+        }
+        
+        return matchmakingResult.result;
+    }
     public void Disconnect()
     {
         _networkClient.Disconnect();
