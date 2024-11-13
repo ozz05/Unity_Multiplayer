@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using UnityEngine;
@@ -9,11 +8,8 @@ using UnityEngine;
 public class NetworkServer : IDisposable
 {
     private NetworkManager _networkManager;
-    private NetworkObject _playerPrefab;
-    public Action<string> OnClientLeft;
-    public Action<UserData> OnUserJoined;
-    public Action<UserData> OnUserLeft;
 
+    public Action<string> OnClientLeft;
 
     private Dictionary<ulong, string> _clientIdToAuth = new Dictionary<ulong, string>();
     private Dictionary<string, UserData> _authIdToUserData = new Dictionary<string, UserData>();
@@ -30,7 +26,7 @@ public class NetworkServer : IDisposable
     {
         UnityTransport transport = _networkManager.gameObject.GetComponent<UnityTransport>();
         transport.SetConnectionData(ip, (ushort)port);
-        return _networkManager.StartServer();
+         return _networkManager.StartServer();
 
     }
     // This function handles the players info being send
@@ -42,26 +38,13 @@ public class NetworkServer : IDisposable
         UserData userData = JsonUtility.FromJson<UserData>(payload);
         _clientIdToAuth[request.ClientNetworkId] = userData.UserAuthId;
         _authIdToUserData[userData.UserAuthId] = userData;
-        OnUserJoined?.Invoke(userData);
 
-        _ = SpawnPlayerDelayed(request.ClientNetworkId);
         // this is to let them finish the connection to the server
         response.Approved = true;
         response.Position = SpawnPoint.GetRandomSpawnPosition();
         response.Rotation = Quaternion.identity;
         response.CreatePlayerObject = true;
     }
-
-    private async Task SpawnPlayerDelayed(ulong clientId)
-    {
-        await Task.Delay(1000);
-
-        NetworkObject playerInstance =
-            GameObject.Instantiate(_playerPrefab, SpawnPoint.GetRandomSpawnPosition(), Quaternion.identity);
-
-        playerInstance.SpawnAsPlayerObject(clientId);
-    }
-
 
     private void OnNetworkReady()
     {
@@ -73,10 +56,11 @@ public class NetworkServer : IDisposable
         if (_clientIdToAuth.TryGetValue(clientId, out string authId))
         {
             _clientIdToAuth.Remove(clientId);
-            OnUserLeft?.Invoke(_authIdToUserData[authId]);
             _authIdToUserData.Remove(authId);
+            //Tells Host that a player has left the game 
             OnClientLeft?.Invoke(authId);
         }
+       
     }
 
     public UserData GetUserDataByClientId(ulong clientId)
