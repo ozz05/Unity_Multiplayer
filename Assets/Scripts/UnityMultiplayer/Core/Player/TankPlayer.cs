@@ -25,7 +25,17 @@ public class TankPlayer : NetworkBehaviour
     {
         if (IsServer)
         {
-            UserData userData =  HostSingleton.Instance.GameManager.NetworkServer.GetUserDataByClientId(OwnerClientId);
+            UserData userData = null;
+            if (IsHost)
+            {
+                userData =  HostSingleton.Instance.GameManager.NetworkServer.GetUserDataByClientId(OwnerClientId);
+            }
+            else
+            {
+                userData = 
+                ServerSingleton.Instance.GameManager.NetworkServer.GetUserDataByClientId(OwnerClientId);
+            }
+            
             PlayerName.Value = userData.UserName;
             OnPlayerSpawned?.Invoke(this);
         }
@@ -33,7 +43,7 @@ public class TankPlayer : NetworkBehaviour
         {
             _cinemachinecCamera.Priority = _cameraownerPriority;
             
-             _miniMapIcon.color = _ownerColor;
+            _miniMapIcon.color = _ownerColor;
             Cursor.SetCursor(_crosshair, new Vector2(_crosshair.width/2, _crosshair.height/2), CursorMode.Auto);
         }
     }

@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Unity.Netcode;
+using Unity.Services.Matchmaker.Models;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -9,8 +10,9 @@ public class ServerGameManager : IDisposable
     private string _serverIP;
     private int _serverPort;
     private int _queryPort;
-    private  NetworkServer _networkServer;
+    private MatchplayBackfiller _backfiller;
     private MultiplayAllocationService _multiplayAllocationService;
+    public  NetworkServer NetworkServer {get; private set;}
     private const string GameSceneName = "Game";
 
     public ServerGameManager(string serverIP, int serverPort, int queryPort, NetworkManager networkManager)
@@ -18,14 +20,34 @@ public class ServerGameManager : IDisposable
         _serverIP = serverIP;
         _serverPort = serverPort;
         _queryPort = queryPort;
-        _networkServer = new NetworkServer(networkManager);
+        
+        NetworkServer = new NetworkServer(networkManager);
         _multiplayAllocationService = new MultiplayAllocationService();
     }
     public async Task StartGameServerAsync()
     {
         await _multiplayAllocationService.BeginServerCheck();
+        try
+        {
+            MatchmakingResults matchmakerPayload = await GetMatchmakerPayload();
 
-        if(!_networkServer.OpenConnection(_serverIP, _serverPort))
+            if (matchmakerPayload != null)
+            {
+                await StartBackfill(matchmakerPayload);
+                NetworkServer.OnUserJoined += UserJoined;
+                NetworkServer.OnUserLeft += UserLeft;
+            }
+            else
+            {
+                Debug.LogWarning("Matchmaker payload timed out");
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning(e);
+        }
+
+        if(!NetworkServer.OpenConnection(_serverIP, _serverPort))
         {
             Debug.LogError("NetworkServer did not start as expected");
             return;
@@ -33,10 +55,74 @@ public class ServerGameManager : IDisposable
         //Loads the scene
         NetworkManager.Singleton.SceneManager.LoadScene(GameSceneName, LoadSceneMode.Single);
     }
+    private async Task<MatchmakingResults> GetMatchmakerPayload()
+    {
+        Task<MatchmakingResults> matchmakerPayloadTask =
+            _multiplayAllocationService.SubscribeAndAwaitMatchmakerAllocation();
+
+        if (await Task.WhenAny(matchmakerPayloadTask, Task.Delay(20000)) == matchmakerPayloadTask)
+        {
+            return matchmakerPayloadTask.Result;
+        }
+
+        return null;
+    }
+
+    private async Task StartBackfill(MatchmakingResults payload)
+    {
+        _backfiller = new MatchplayBackfiller($"{_serverIP}:{_serverPort}",
+            payload.QueueName,
+            payload.MatchProperties,
+            20);
+
+        if (_backfiller.NeedsPlayers())
+        {
+            await _backfiller.BeginBackfilling();
+        }
+    }
+
+    private void UserJoined(UserData user)
+    {
+        _backfiller.AddPlayerToMatch(user);
+        _multiplayAllocationService.AddPlayer();
+        if(!_backfiller.NeedsPlayers() && _backfiller.IsBackfilling)
+        {
+            _ = _backfiller.StopBackfill();
+        }
+    }
+
+    private void UserLeft(UserData user)
+    {
+        int playerCount = _backfiller.RemovePlayerFromMatch(user.UserAuthId);
+        _multiplayAllocationService.RemovePlayer();
+
+        if(playerCount <= 0)
+        {
+            CloseServer();
+            return;
+        }
+
+        if(_backfiller.NeedsPlayers() && !_backfiller.IsBackfilling)
+        {
+            _ = _backfiller.BeginBackfilling();
+        }
+    }
+
+    private async void CloseServer()
+    {
+        await _backfiller.StopBackfill();
+        Dispose();
+        Application.Quit();
+    }
 
     public void Dispose()
     {
+        NetworkServer.OnUserJoined -= UserJoined;
+        NetworkServer.OnUserLeft -= UserLeft;
+
+        _backfiller?.Dispose();
+
         _multiplayAllocationService?.Dispose();
-        _networkServer?.Dispose();
+        NetworkServer?.Dispose();
     }
 }

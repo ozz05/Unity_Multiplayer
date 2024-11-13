@@ -42,5 +42,5 @@ public class UserData
 {
     public string UserName;
     public string UserAuthId;
-    public GameInfo UserGamePreferences;
+    public GameInfo UserGamePreferences = new GameInfo();
 }

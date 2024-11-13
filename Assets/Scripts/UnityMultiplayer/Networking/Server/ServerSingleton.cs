@@ -31,6 +31,7 @@ public class ServerSingleton : MonoBehaviour
     public async Task CreateServer()
     {
         await UnityServices.InitializeAsync();
+        
         GameManager = new ServerGameManager(
             ApplicationData.IP(),
             ApplicationData.Port(),
