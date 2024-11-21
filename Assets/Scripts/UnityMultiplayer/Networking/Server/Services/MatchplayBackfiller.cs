@@ -64,16 +64,16 @@ public class MatchplayBackfiller : IDisposable
             return;
         }
 
-        if (GetPlayerById(userData.UserAuthId) != null)
+        if (GetPlayerById(userData.userAuthId) != null)
         {
             Debug.LogWarningFormat("User: {0} - {1} already in Match. Ignoring add.",
-                userData.UserName,
-                userData.UserAuthId);
+                userData.userName,
+                userData.userAuthId);
                 
             return;
         }
 
-        Player matchmakerPlayer = new Player(userData.UserAuthId, userData.UserGamePreferences);
+        Player matchmakerPlayer = new Player(userData.userAuthId, userData.userGamePreferences);
 
         MatchProperties.Players.Add(matchmakerPlayer);
         MatchProperties.Teams[0].PlayerIds.Add(matchmakerPlayer.Id);

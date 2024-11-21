@@ -5,11 +5,11 @@ using UnityEngine;
 
 public class ApplicationController : MonoBehaviour
 {
-    [SerializeField] private ClientSingleton _clientPrefab;
-    [SerializeField] private HostSingleton _hostPrefab;
-    [SerializeField] private ServerSingleton _serverPrefab;
-    
-    private ApplicationData _appData;
+    [SerializeField] private ClientSingleton clientPrefab;
+    [SerializeField] private HostSingleton hostPrefab;
+    [SerializeField] private ServerSingleton serverPrefab;
+
+    private ApplicationData appData;
 
     private async void Start()
     {
@@ -22,27 +22,26 @@ public class ApplicationController : MonoBehaviour
     {
         if (isDedicatedServer)
         {
-            _appData = new ApplicationData();
+            appData = new ApplicationData();
 
-            ServerSingleton serverSingleton = Instantiate(_serverPrefab);
+            ServerSingleton serverSingleton = Instantiate(serverPrefab);
+
             await serverSingleton.CreateServer();
 
             await serverSingleton.GameManager.StartGameServerAsync();
         }
         else
         {
-            HostSingleton hostSingleton = Instantiate(_hostPrefab);
+            HostSingleton hostSingleton = Instantiate(hostPrefab);
             hostSingleton.CreateHost();
 
-            ClientSingleton clientSingleton = Instantiate(_clientPrefab);
-            bool authenticated = await clientSingleton.CreateClientAsync();
-            
-            //Go to main menu
+            ClientSingleton clientSingleton = Instantiate(clientPrefab);
+            bool authenticated = await clientSingleton.CreateClient();
+
             if (authenticated)
             {
                 clientSingleton.GameManager.GoToMenu();
             }
         }
     }
-
 }

@@ -1,7 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
 public enum Map
 {
@@ -20,6 +17,14 @@ public enum GameQueue
 }
 
 [Serializable]
+public class UserData
+{
+    public string userName;
+    public string userAuthId;
+    public GameInfo userGamePreferences = new GameInfo();
+}
+
+[Serializable]
 public class GameInfo
 {
     public Map map;
@@ -35,12 +40,4 @@ public class GameInfo
             _ => "solo-queue"
         };
     }
-}
-
-[Serializable]
-public class UserData
-{
-    public string UserName;
-    public string UserAuthId;
-    public GameInfo UserGamePreferences = new GameInfo();
 }

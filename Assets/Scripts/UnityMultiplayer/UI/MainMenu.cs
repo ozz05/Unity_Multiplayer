@@ -3,14 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
-    [SerializeField] private TMP_InputField _joinCodeField;
     [SerializeField] private TMP_Text _queueStatusText;
     [SerializeField] private TMP_Text _timeInQueueText;
     [SerializeField] private TMP_Text _findMatchButtonText;
+    [SerializeField] private TMP_InputField _joinCodeField;
+
     private bool _isMatchmaking;
     private bool _isCancelling;
 
@@ -20,12 +20,14 @@ public class MainMenu : MonoBehaviour
         if(ClientSingleton.Instance == null) return;
         //Set the cursor to normal
         Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+
         _queueStatusText.text = string.Empty;
         _timeInQueueText.text = string.Empty;    
     }
     public async void FindMatchPressed()
     {
         if(_isCancelling) return;
+
         if(_isMatchmaking)
         {   
             _queueStatusText.text = "Cancelling...";

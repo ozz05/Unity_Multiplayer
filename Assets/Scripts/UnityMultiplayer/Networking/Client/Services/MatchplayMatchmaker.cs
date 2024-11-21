@@ -36,13 +36,13 @@ public class MatchplayMatchmaker : IDisposable
     {
         cancelToken = new CancellationTokenSource();
 
-        string queueName = data.UserGamePreferences.ToMultiplayQueue();
+        string queueName = data.userGamePreferences.ToMultiplayQueue();
         CreateTicketOptions createTicketOptions = new CreateTicketOptions(queueName);
         Debug.Log(createTicketOptions.QueueName);
 
         List<Player> players = new List<Player>
         {
-            new Player(data.UserAuthId, data.UserGamePreferences)
+            new Player(data.userAuthId, data.userGamePreferences)
         };
 
         try

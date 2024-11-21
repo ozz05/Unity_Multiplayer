@@ -38,7 +38,7 @@ public class TankPlayer : NetworkBehaviour
                     ServerSingleton.Instance.GameManager.NetworkServer.GetUserDataByClientId(OwnerClientId);
             }
 
-            PlayerName.Value = userData.UserName;
+            PlayerName.Value = userData.userName;
             OnPlayerSpawned?.Invoke(this);
         }
         if (IsOwner)
