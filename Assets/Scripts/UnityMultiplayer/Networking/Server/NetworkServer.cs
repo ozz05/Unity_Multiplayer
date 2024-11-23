@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using UnityEngine;
@@ -8,6 +9,7 @@ using UnityEngine;
 public class NetworkServer : IDisposable
 {
     private NetworkManager networkManager;
+    private NetworkObject _playerPrefab;
 
     public Action<UserData> OnUserJoined;
     public Action<UserData> OnUserLeft;
@@ -17,9 +19,10 @@ public class NetworkServer : IDisposable
     private Dictionary<ulong, string> clientIdToAuth = new Dictionary<ulong, string>();
     private Dictionary<string, UserData> authIdToUserData = new Dictionary<string, UserData>();
 
-    public NetworkServer(NetworkManager networkManager)
+    public NetworkServer(NetworkManager networkManager, NetworkObject playerPrefab)
     {
         this.networkManager = networkManager;
+        _playerPrefab = playerPrefab;
 
         networkManager.ConnectionApprovalCallback += ApprovalCheck;
         networkManager.OnServerStarted += OnNetworkReady;
@@ -43,12 +46,17 @@ public class NetworkServer : IDisposable
         authIdToUserData[userData.userAuthId] = userData;
         OnUserJoined?.Invoke(userData);
 
+        // _ = : this is to avoid having a await 
+        _ = SpawnPlayerDelay(request.ClientNetworkId);
         response.Approved = true;
-        response.Position = SpawnPoint.GetRandomSpawnPosition();
-        response.Rotation = Quaternion.identity;
-        response.CreatePlayerObject = true;
+        response.CreatePlayerObject = false;
     }
-
+    private async Task SpawnPlayerDelay(ulong clientId)
+    {
+        await Task.Delay(1000);
+        NetworkObject playerInstance = GameObject.Instantiate(_playerPrefab, SpawnPoint.GetRandomSpawnPosition(), Quaternion.identity);
+        playerInstance.SpawnAsPlayerObject(clientId);
+    }
     private void OnNetworkReady()
     {
         networkManager.OnClientDisconnectCallback += OnClientDisconnect;

@@ -404,6 +404,7 @@ MonoBehaviour:
   clientPrefab: {fileID: 5064898159884515576, guid: 7d5ef630a24bd6943b747cd38ce44f5b, type: 3}
   hostPrefab: {fileID: 7056758574323186146, guid: fea46aa8e57bfc74191b89e90e0542b3, type: 3}
   serverPrefab: {fileID: 8707968475070713665, guid: 0b0283c378522e54d9912e79644e2124, type: 3}
+  _playerPrefab: {fileID: 8858475266619411769, guid: 35c92917b2ebcf448ae9dfacd8b67e28, type: 3}
 --- !u!1 &1079583455
 GameObject:
   m_ObjectHideFlags: 0
