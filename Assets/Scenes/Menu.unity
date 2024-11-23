@@ -2166,6 +2166,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _lobbyItemPrefab: {fileID: 8910096150098922644, guid: b3df5f6f7db3e654ea4382ec2a39bf05, type: 3}
   _lobbyItemParent: {fileID: 1799996324}
+  _mainMenu: {fileID: 1668674412}
 --- !u!1 &1079583455
 GameObject:
   m_ObjectHideFlags: 0
@@ -3163,10 +3164,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff2fc77c05e1b7d46b6894db62785394, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _joinCodeField: {fileID: 1103090078}
   _queueStatusText: {fileID: 1137293950}
   _timeInQueueText: {fileID: 1566679023}
   _findMatchButtonText: {fileID: 358155431}
+  _joinCodeField: {fileID: 1103090078}
 --- !u!1 &1772864116
 GameObject:
   m_ObjectHideFlags: 0
