@@ -78,3 +78,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _damge: 10
+  _projectile: {fileID: 9024182657187851481}
+--- !u!114 &9024182657187851481 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1845890175873904479, guid: 164998f1f18db084682c0e4d62075d6d, type: 3}
+  m_PrefabInstance: {fileID: 7251284705401947014}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6373978796151071446}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e5cd3c5dcabeec4d9125debe87dc9e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
