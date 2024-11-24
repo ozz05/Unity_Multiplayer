@@ -15213,6 +15213,7 @@ GameObject:
   - component: {fileID: 2958533606008450097}
   - component: {fileID: 6948830188747273359}
   - component: {fileID: 3496816127410392433}
+  - component: {fileID: 532425705566997096}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -15364,6 +15365,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: daaafcc13688b0647b1b76e30d137900, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _player: {fileID: 3496816127410392433}
   _inputReader: {fileID: 11400000, guid: 1db3a49c67ccef2419e09fdef38eef3d, type: 2}
   _projectileSpawnPoint: {fileID: 8061567582839947044}
   _serverProjectilePrefab: {fileID: 6373978796151071446, guid: b6e70019ac3ad2147b06c3b4f39b05c3, type: 3}
@@ -15467,6 +15469,23 @@ MonoBehaviour:
         byte0027: 0
         byte0028: 0
         byte0029: 0
+  TeamIndex:
+    m_InternalValue: 0
+--- !u!114 &532425705566997096
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6949045200682993264}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848bf637e46d65f43a31ce30fd98db00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _player: {fileID: 3496816127410392433}
+  _playerSprite: {fileID: 7799434991853358436}
+  _teamColorLookup: {fileID: 11400000, guid: 5e9a3025450228e4a9cdf72f2eb1eb21, type: 2}
 --- !u!1 &7931433317242667545
 GameObject:
   m_ObjectHideFlags: 0

@@ -18,6 +18,8 @@ public class TankPlayer : NetworkBehaviour
     [SerializeField] private int _cameraownerPriority = 11;
 
     public NetworkVariable<FixedString32Bytes> PlayerName = new NetworkVariable<FixedString32Bytes>();
+    public NetworkVariable<int> TeamIndex = new NetworkVariable<int>();
+
     public static Action<TankPlayer> OnPlayerSpawned;
     public static Action<TankPlayer> OnPlayerDespawned;
 
@@ -39,6 +41,8 @@ public class TankPlayer : NetworkBehaviour
             }
 
             PlayerName.Value = userData.userName;
+            TeamIndex.Value = userData.teamIndex;
+
             OnPlayerSpawned?.Invoke(this);
         }
         if (IsOwner)

@@ -17,7 +17,7 @@ using UnityEngine.SceneManagement;
 public class HostGameManager : IDisposable
 {
     private Allocation allocation;
-    private string joinCode;
+    public string JoinCode { get; private set; }
     private string lobbyId;
 
     public NetworkServer NetworkServer { get; private set; }
@@ -31,7 +31,7 @@ public class HostGameManager : IDisposable
         _playerPrefab = playerPrefab;
     }
 
-    public async Task StartHostAsync()
+    public async Task StartHostAsync(bool isPrivate)
     {
         try
         {
@@ -45,8 +45,8 @@ public class HostGameManager : IDisposable
 
         try
         {
-            joinCode = await Relay.Instance.GetJoinCodeAsync(allocation.AllocationId);
-            Debug.Log(joinCode);
+            JoinCode = await Relay.Instance.GetJoinCodeAsync(allocation.AllocationId);
+            Debug.Log(JoinCode);
         }
         catch (Exception e)
         {
@@ -62,13 +62,13 @@ public class HostGameManager : IDisposable
         try
         {
             CreateLobbyOptions lobbyOptions = new CreateLobbyOptions();
-            lobbyOptions.IsPrivate = false;
+            lobbyOptions.IsPrivate = isPrivate;
             lobbyOptions.Data = new Dictionary<string, DataObject>()
             {
                 {
                     "JoinCode", new DataObject(
                         visibility: DataObject.VisibilityOptions.Member,
-                        value: joinCode
+                        value: JoinCode
                     )
                 }
             };
